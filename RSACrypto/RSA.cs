@@ -1,6 +1,6 @@
 ﻿namespace RSACrypto;
 
-public class Class1
+public class RSA
 {
 
 }

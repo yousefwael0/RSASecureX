@@ -1,6 +1,6 @@
 ﻿namespace BigIntegerLib;
 
-public class Class1
+public class BigInteger
 {
 
 }
