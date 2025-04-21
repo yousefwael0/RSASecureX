@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSASecureX", "RSASecureX\RSASecureX.csproj", "{95D29255-2D51-46DE-B0ED-7C064CAF780C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigIntegerLib", "BigIntegerLib\BigIntegerLib.csproj", "{035D704B-B339-485F-871B-3DBC45B0875D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSACrypto", "RSACrypto\RSACrypto.csproj", "{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95D29255-2D51-46DE-B0ED-7C064CAF780C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95D29255-2D51-46DE-B0ED-7C064CAF780C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95D29255-2D51-46DE-B0ED-7C064CAF780C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95D29255-2D51-46DE-B0ED-7C064CAF780C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{035D704B-B339-485F-871B-3DBC45B0875D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{035D704B-B339-485F-871B-3DBC45B0875D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{035D704B-B339-485F-871B-3DBC45B0875D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{035D704B-B339-485F-871B-3DBC45B0875D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
