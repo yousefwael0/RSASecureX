@@ -115,4 +115,38 @@ public class BigInteger
     public static bool operator <=(BigInteger a, BigInteger b) => (a < b) || (a == b);
 
     public static bool operator >=(BigInteger a, BigInteger b) => (a > b) || (a == b);
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(this, obj))
+            return true;
+        if (obj is null || obj.GetType() != this.GetType())
+            return false;
+
+        BigInteger other = (BigInteger)obj;
+
+        if (digits.Count != other.digits.Count)
+            return false;
+
+        // Compare from most significant digit first
+        for (int i = digits.Count - 1; i >= 0; i--)
+        {
+            if (digits[i] != other.digits[i])
+                return false;
+        }
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        // If the number is huge, don't hash all digits — sample a few
+        int hash = 17;
+        int step = Math.Max(1, digits.Count / 10); // Sample 10 digits max
+
+        for (int i = 0; i < digits.Count; i += step)
+        {
+            hash = hash * 31 + digits[i];
+        }
+        return hash;
+    }
 }
