@@ -6,72 +6,29 @@ using RSACrypto;
 
 namespace RSASecureX;
 
-public class TestCase
-{
-    public string N { get; set; }
-    public string Exponent { get; set; }  // e or d
-    public string Message { get; set; }   // M or E(M)
-    public bool IsDecrypt { get; set; }   // True If Decrypting
-}
-
 class Program
 {
     static void Main(string[] args)
     {
-        int systemTimeStart = System.Environment.TickCount;
         Console.WriteLine("RSA SecureX - Program Started.");
 
         // TODO: Read input file
-        List<TestCase> testCases = new List<TestCase>();
-        testCases = ReadInput("Test.txt");
-
-        System.Console.WriteLine(testCases.Count);
         // TODO: Choose encryption or decryption
         // TODO: Measure execution time
         // TODO: Write result to output file
-        List<string> outputs = new List<string>();
-        outputs = ["1",  "2", "3"];
-        WriteOutput("Output.txt", outputs);
-
-        int systemTimeEnd = System.Environment.TickCount;
-        Console.WriteLine("Execution Time: " + (systemTimeEnd - systemTimeStart) + "ms");
     }
 
     // Read input from file
-    public static List<TestCase> ReadInput(string inputPath)
+    static void ReadInput(string inputPath)
     {
-        List<TestCase> testCases = new List<TestCase>();
-
-        string[] lines = File.ReadAllLines(inputPath);
-        int index = 1;
-        int totalCases = int.Parse(lines[0]);
-
-        for (int i = 0; i < totalCases; i++)
-        {
-            string n = lines[index++];
-            string exponent = lines[index++];
-            string message = lines[index++];
-            int mode = int.Parse(lines[index++]);
-
-            testCases.Add(new TestCase
-            {
-                N = n,
-                Exponent = exponent,
-                Message = message,
-                IsDecrypt = (mode == 1)
-            });
-        }
-
-        return testCases;
+        throw new NotImplementedException();
     }
-
 
     // Write output to file
-    static void WriteOutput(string outputPath, List<string> results)
+    static void WriteOutput(string outputPath, string result)
     {
-        File.WriteAllLines(outputPath, results);
+        throw new NotImplementedException();
     }
-
 
     // Measure execution time helper
     static TimeSpan MeasureExecutionTime(Action operation)
