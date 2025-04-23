@@ -12,8 +12,13 @@ public class BigInteger
 
     // 0000000 1234567 890123456 
 
-    // digits = {  "1234567 ", "890123456 ", " "}
+    // digits = { "890123456 ", "1234567 "}
     // Constructor
+    public BigInteger()
+    {
+        digits = new List<int> { 0 }; // Initialize with zero
+    }
+
     public BigInteger(string number)
     {
 
@@ -73,22 +78,98 @@ public class BigInteger
 
     public BigInteger Add(BigInteger a, BigInteger b)
     {
-        throw new NotImplementedException();
+        BigInteger result = new BigInteger();
+        result.digits.Clear();
+
+        int carry = 0;
+        int length = Math.Max(a.digits.Count, b.digits.Count);
+
+        for(int i = 0; i < length || carry > 0; i++)
+        {
+            int sum = carry;
+            if (i < a.digits.Count) sum += a.digits[i];
+            if (i < b.digits.Count) sum += b.digits[i];
+
+            carry = sum / Base;
+            result.digits.Add(sum % Base);
+        }
+
+        return result;
+
     }
 
-    public BigInteger Subtract(BigInteger other)
+    public static bool operator <(BigInteger a, BigInteger b)
     {
-        throw new NotImplementedException();
+        if (a.digits.Count != b.digits.Count)
+            return a.digits.Count < b.digits.Count;
+
+        for (int i = a.digits.Count - 1; i >= 0; i--)
+        {
+            if (a.digits[i] != b.digits[i])
+                return a.digits[i] < b.digits[i];
+        }
+
+        return false; // equal
+    }
+
+    // Required matching > operator
+    public static bool operator >(BigInteger a, BigInteger b)
+    {
+        if (a.digits.Count != b.digits.Count)
+            return a.digits.Count > b.digits.Count;
+
+        for (int i = a.digits.Count - 1; i >= 0; i--)
+        {
+            if (a.digits[i] != b.digits[i])
+                return a.digits[i] > b.digits[i];
+        }
+
+        return false; // equal
+    }
+
+
+    public BigInteger Subtract(BigInteger a, BigInteger b)
+    {
+
+        if (a < b) throw new ArgumentException("a must be greater than or equal to b");
+
+        BigInteger result = new BigInteger();
+        result.digits.Clear();
+
+
+        int borrow = 0;
+        for (int i = 0; i < a.digits.Count; i++)
+        {
+            int diff = a.digits[i] - borrow;
+            if (i < b.digits.Count) diff -= b.digits[i];
+
+            if (diff < 0)
+            {
+                diff += Base;
+                borrow = 1;
+            }
+            else
+            {
+                borrow = 0;
+            }
+
+            result.digits.Add(diff);
+        }
+
+        result.RemoveLeadingZeros();
+        return result;
+
     }
 
     public bool IsOdd()
     {
-        throw new NotImplementedException();
+        return !IsEven();
     }
 
     public bool IsEven()
     {
-        throw new NotImplementedException();
+
+        return digits.Count == 0 || digits[0] % 2 == 0;
     }
 
     // ========== Advanced Operations ==========
