@@ -1,56 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BigIntegerLib;
 
 public class BigInteger
 {
     private List<int> digits;
+    int Base = 1000000000; // 10^9
+    int DigitLength = 9;
 
-        // Constructor
-        public BigInteger(string number)
+    // 0000000 1234567 890123456 
+
+    // digits = {  "1234567 ", "890123456 ", " "}
+    // Constructor
+    public BigInteger(string number)
+    {
+
+        if (string.IsNullOrEmpty(number))
         {
-            // TODO: Parse the string into digits
-            throw new NotImplementedException();
+            throw new ArgumentException("Enter a Number");
         }
 
-        // Convert back to string
-        public override string ToString()
+        digits = new List<int>();
+
+        for (int i = number.Length; i > 0; i -= DigitLength)
         {
-            throw new NotImplementedException();
+            int start = Math.Max(0, i - DigitLength);
+            string chunk = number.Substring(start, i - start);
+
+            if (!int.TryParse(chunk, out int digit))
+            {
+                throw new ArgumentException("Invalid");
+            }
+
+            digits.Add(digit);
+
         }
 
-        // ========== Basic Operations ==========
+        RemoveLeadingZeros();
 
-        public BigInteger Add(BigInteger other)
+    }
+
+    void RemoveLeadingZeros()
+    {
+
+        while (digits.Count > 1 && digits[^1] == 0)
         {
-            throw new NotImplementedException();
+            digits.RemoveAt(digits.Count - 1);
+        }
+    }
+
+    public BigInteger(int value) : this(value.ToString()) { }
+    public BigInteger(long value) : this(value.ToString()) { }
+
+    // Convert back to string
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append(digits[^1].ToString()); // Add highest digit without padding
+
+        // Add remaining digits with leading zeros
+        for (int i = digits.Count - 2; i >= 0; i--)
+        {
+            sb.Append(digits[i].ToString().PadLeft(DigitLength, '0'));
         }
 
-        public BigInteger Subtract(BigInteger other)
-        {
-            throw new NotImplementedException();
-        }
+        return sb.ToString();
+    }
 
-        public bool IsOdd()
-        {
-            throw new NotImplementedException();
-        }
+    // ========== Basic Operations ==========
 
-        public bool IsEven()
-        {
-            throw new NotImplementedException();
-        }
+    public BigInteger Add(BigInteger a, BigInteger b)
+    {
+        throw new NotImplementedException();
+    }
 
-        // ========== Advanced Operations ==========
+    public BigInteger Subtract(BigInteger other)
+    {
+        throw new NotImplementedException();
+    }
 
-        public BigInteger Multiply(BigInteger other)
-        {
-            throw new NotImplementedException();
-        }
+    public bool IsOdd()
+    {
+        throw new NotImplementedException();
+    }
 
-        public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger other)
-        {
-            throw new NotImplementedException();
-        }
+    public bool IsEven()
+    {
+        throw new NotImplementedException();
+    }
+
+    // ========== Advanced Operations ==========
+
+    public BigInteger Multiply(BigInteger other)
+    {
+        throw new NotImplementedException();
+    }
+
+    public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger other)
+    {
+        throw new NotImplementedException();
+    }
 }
