@@ -74,6 +74,81 @@ public class BigInteger
         return sb.ToString();
     }
 
+    //operators
+    public static bool operator <(BigInteger a, BigInteger b)
+    {
+        if (a.digits.Count != b.digits.Count)
+            return a.digits.Count < b.digits.Count;
+
+        for (int i = a.digits.Count - 1; i >= 0; i--)
+        {
+            if (a.digits[i] != b.digits[i])
+                return a.digits[i] < b.digits[i];
+        }
+
+        return false; // equal
+    }
+
+    public static bool operator >(BigInteger a, BigInteger b)
+    {
+        if (a.digits.Count != b.digits.Count)
+            return a.digits.Count > b.digits.Count;
+
+        for (int i = a.digits.Count - 1; i >= 0; i--)
+        {
+            if (a.digits[i] != b.digits[i])
+                return a.digits[i] > b.digits[i];
+        }
+
+        return false; // equal
+    }
+    //elgded
+    public static bool operator <=(BigInteger a, BigInteger b)
+    {
+        return (a < b) || (a == b);
+    }
+
+    public static bool operator >=(BigInteger a, BigInteger b)
+    {
+        return (a > b) || (a == b);
+    }
+
+    public static bool operator ==(BigInteger a, BigInteger b)
+    {
+        if (ReferenceEquals(a, b)) return true;
+        if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
+
+        if (a.digits.Count != b.digits.Count)
+            return false;
+
+        for (int i = 0; i < a.digits.Count; i++)
+        {
+            if (a.digits[i] != b.digits[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    public static bool operator !=(BigInteger a, BigInteger b)
+    {
+        return !(a == b);
+    }
+ public override bool Equals(object obj)
+    {
+        if (obj is not BigInteger) return false;
+        return this == (BigInteger)obj;
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = 17;
+        foreach (int digit in digits)
+        {
+            hash = hash * 31 + digit;
+        }
+        return hash;
+    }
     // ========== Basic Operations ==========
 
     public BigInteger Add(BigInteger a, BigInteger b)
@@ -98,36 +173,8 @@ public class BigInteger
 
     }
 
-    public static bool operator <(BigInteger a, BigInteger b)
-    {
-        if (a.digits.Count != b.digits.Count)
-            return a.digits.Count < b.digits.Count;
-
-        for (int i = a.digits.Count - 1; i >= 0; i--)
-        {
-            if (a.digits[i] != b.digits[i])
-                return a.digits[i] < b.digits[i];
-        }
-
-        return false; // equal
-    }
-
-    // Required matching > operator
-    public static bool operator >(BigInteger a, BigInteger b)
-    {
-        if (a.digits.Count != b.digits.Count)
-            return a.digits.Count > b.digits.Count;
-
-        for (int i = a.digits.Count - 1; i >= 0; i--)
-        {
-            if (a.digits[i] != b.digits[i])
-                return a.digits[i] > b.digits[i];
-        }
-
-        return false; // equal
-    }
-
-
+   
+   
     public BigInteger Subtract(BigInteger a, BigInteger b)
     {
 
