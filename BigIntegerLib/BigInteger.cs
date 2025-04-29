@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 
 namespace BigIntegerLib;
@@ -226,7 +227,6 @@ public class BigInteger
         {
             x.RemoveLeadingZeros();
             y.RemoveLeadingZeros();
-
 
             if (x.digits.Count == 1 && y.digits.Count == 1)
             {
