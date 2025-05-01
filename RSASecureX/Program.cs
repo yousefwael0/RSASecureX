@@ -21,6 +21,8 @@ class Program
         int systemTimeStart = System.Environment.TickCount;
         Console.WriteLine("RSA SecureX - Program Started.");
 
+        RSA rsa = new RSA();
+
         // TODO: Read input file
         List<TestCase> testCases = new List<TestCase>();
         testCases = ReadInput("Test.txt");
@@ -30,7 +32,27 @@ class Program
         // TODO: Measure execution time
         // TODO: Write result to output file
         List<string> outputs = new List<string>();
-        outputs = ["1",  "2", "3"];
+
+        foreach (var testCase in testCases)
+        {
+            BigInteger n = new BigInteger(testCase.N);
+            BigInteger exp = new BigInteger(testCase.Exponent);
+            BigInteger message = new BigInteger(testCase.Message);
+
+            BigInteger result;
+
+            if (testCase.IsDecrypt)
+            {
+                result = rsa.Decrypt(message, exp, n);
+            }
+            else
+            {
+                result = rsa.Encrypt(message, exp, n);
+            }
+
+            outputs.Add(result.ToString());
+        }
+
         WriteOutput("Output.txt", outputs);
 
         int systemTimeEnd = System.Environment.TickCount;
