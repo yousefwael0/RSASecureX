@@ -10,6 +10,10 @@ public class BigInteger
     private List<int> digits;
     int Base = 1000000000; // 10^9
     int DigitLength = 9;
+    public static readonly BigInteger Zero = new BigInteger("0");
+    public static readonly BigInteger One = new BigInteger("1");
+    public static readonly BigInteger Two = new BigInteger("2");
+
 
     // 0000000 1234567 890123456 
 
@@ -103,6 +107,7 @@ public class BigInteger
 
         return false; // equal
     }
+
     //elgded
     public static bool operator <=(BigInteger a, BigInteger b)
     {
@@ -129,13 +134,43 @@ public class BigInteger
         }
 
         return true;
+
     }
+
+
+    public static BigInteger operator +(BigInteger a, BigInteger b)
+    {
+        return a.Add(b);
+    }
+
+    public static BigInteger operator -(BigInteger a, BigInteger b)
+    {
+        return a.Subtract(b);
+    }
+
+    public static BigInteger operator *(BigInteger a, BigInteger b)
+    {
+        return a.Multiply(b);
+    }
+
+    public static BigInteger operator /(BigInteger a, BigInteger b)
+    {
+        return a.Divide(b).Quotient;
+    }
+
+    public static BigInteger operator %(BigInteger a, BigInteger b)
+    {
+        return a.Divide(b).Remainder;
+    }
+
     //
     public static bool operator !=(BigInteger a, BigInteger b)
     {
         return !(a == b);
     }
- public override bool Equals(object obj)
+
+
+    public override bool Equals(object obj)
     {
         if (obj is not BigInteger) return false;
         return this == (BigInteger)obj;
@@ -243,8 +278,8 @@ public class BigInteger
             BigInteger low2 = y.Split(0, m);
             BigInteger high2 = y.Split(m, y.digits.Count - m);
 
-            BigInteger z0 = Karatsuba(low1, low2);
-            BigInteger z1 = Karatsuba(low1 + high1, low2 + high2);
+            BigInteger z0 = Karatsuba(low1, low2);//mafesh implementation function karatsuba
+            BigInteger z1 = Karatsuba(low1 + high1, low2 + high2);//+ and - operators mesh mawgodeen 
             BigInteger z2 = Karatsuba(high1, high2);
 
             BigInteger result = ShiftLeft(z2, 2 * m) + ShiftLeft(z1 - z2 - z0, m) + z0;
@@ -281,7 +316,7 @@ public class BigInteger
     {
         public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger divisor)
         {
-            if (divisor.IsZero())
+            if (divisor.IsZero())//ma3ndansh iszero()
                 throw new DivideByZeroException("Cannot divide by zero.");
 
             if (this.IsZero())
@@ -305,7 +340,7 @@ public class BigInteger
                 while (low <= high)
                 {
                     int mid = (low + high) / 2;
-                    BigInteger trial = divisor * new BigInteger(mid);
+                    BigInteger trial = divisor * new BigInteger(mid);//mafesh * operator
                     if (trial <= remainder)
                     {
                         best = mid;

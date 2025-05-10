@@ -18,8 +18,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
@@ -27,6 +31,10 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -38,8 +46,7 @@
               "RelativeToolTip": "RSASecureX\\Program.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAAAA4AAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T15:50:01.004Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T15:50:01.004Z"
             },
             {
               "$type": "Document",
@@ -49,7 +56,7 @@
               "RelativeDocumentMoniker": "BigIntegerLib\\BigInteger.cs",
               "ToolTip": "D:\\Nour\\Spring2025\\Algorithms\\Algoproject\\BigIntegerLib\\BigInteger.cs",
               "RelativeToolTip": "BigIntegerLib\\BigInteger.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAAH8AAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAPkAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-23T13:33:51.565Z",
               "EditorCaption": ""
