@@ -150,7 +150,7 @@ public class BigInteger
 
     public static BigInteger operator *(BigInteger a, BigInteger b)
     {
-        return a.Multiply(b);
+        return Karatsuba(a, b);
     }
 
     public static BigInteger operator /(BigInteger a, BigInteger b)
@@ -195,7 +195,7 @@ public class BigInteger
         int carry = 0;
         int length = Math.Max(this.digits.Count, other.digits.Count);
 
-        for(int i = 0; i < length || carry > 0; i++)
+        for (int i = 0; i < length || carry > 0; i++)
         {
             int sum = carry;
             if (i < this.digits.Count) sum += this.digits[i];
@@ -208,7 +208,7 @@ public class BigInteger
         return result;
 
     }
-   
+
     public BigInteger Subtract(BigInteger other)
     {
 
@@ -259,111 +259,130 @@ public class BigInteger
 
     // ========== Advanced Operations ==========
 
-    public BigInteger Multiply(BigInteger x, BigInteger y)
+    private static BigInteger NaiveMultiplication(BigInteger a, BigInteger b)
     {
-        {
-            x.RemoveLeadingZeros();
-            y.RemoveLeadingZeros();
+        BigInteger result = new BigInteger();
+        result.digits = new List<int>(new int[a.digits.Count + b.digits.Count]);
 
-            if (x.digits.Count == 1 && y.digits.Count == 1)
+        for (int i = 0; i < a.digits.Count; i++)
+        {
+            long carry = 0;
+            for (int j = 0; j < b.digits.Count || carry > 0; j++)
             {
-                long product = (long)x.digits[0] * y.digits[0];
-                return new BigInteger(product);
+                long current = result.digits[i + j]
+                             + (long)a.digits[i] * (j < b.digits.Count ? b.digits[j] : 0)
+                             + carry;
+
+                result.digits[i + j] = (int)(current % a.Base);
+                carry = current / a.Base;
             }
-
-            int n = Math.Max(x.digits.Count, y.digits.Count);
-            int m = n / 2;
-
-
-            BigInteger low1 = x.Split(0, m);
-            BigInteger high1 = x.Split(m, x.digits.Count - m);
-            BigInteger low2 = y.Split(0, m);
-            BigInteger high2 = y.Split(m, y.digits.Count - m);
-
-            BigInteger z0 = Karatsuba(low1, low2);//mafesh implementation function karatsuba
-            BigInteger z1 = Karatsuba(low1 + high1, low2 + high2);//+ and - operators mesh mawgodeen 
-            BigInteger z2 = Karatsuba(high1, high2);
-
-            BigInteger result = ShiftLeft(z2, 2 * m) + ShiftLeft(z1 - z2 - z0, m) + z0;
-            result.RemoveLeadingZeros();
-            return result;
         }
 
-
-        private static BigInteger ShiftLeft(BigInteger a, int m)
-        {
-            if (a == new BigInteger("0")) return new BigInteger("0");
-
-            BigInteger result = new BigInteger();
-            result.digits = new List<int>(new int[m]);
-            result.digits.AddRange(a.digits);
-            return result;
-        }
-
-        private BigInteger Split(int start, int count)
-        {
-            BigInteger result = new BigInteger();
-            result.digits.Clear();
-
-            for (int i = start; i < start + count && i < digits.Count; i++)
-                result.digits.Add(digits[i]);
-
-            result.RemoveLeadingZeros();
-            return result;
-        }
-       
+        result.RemoveLeadingZeros();
+        return result;
     }
 
-    public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger other)
+    public static BigInteger Karatsuba(BigInteger x, BigInteger y)
     {
-        public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger divisor)
+        x.RemoveLeadingZeros();
+        y.RemoveLeadingZeros();
+
+        // BASE CASE: Use naive multiplication for small inputs
+        if (x.digits.Count <= 32 || y.digits.Count <= 32)
+            return NaiveMultiplication(x, y);
+
+        int n = Math.Max(x.digits.Count, y.digits.Count);
+        int m = n / 2;
+
+        BigInteger low1 = x.Split(0, m);
+        BigInteger high1 = x.Split(m, x.digits.Count - m);
+        BigInteger low2 = y.Split(0, m);
+        BigInteger high2 = y.Split(m, y.digits.Count - m);
+
+        BigInteger z0 = Karatsuba(low1, low2);
+        BigInteger z1 = Karatsuba(low1 + high1, low2 + high2);
+        BigInteger z2 = Karatsuba(high1, high2);
+
+        BigInteger result = ShiftBase(z2, 2 * m) + ShiftBase(z1 - z2 - z0, m) + z0;
+        result.RemoveLeadingZeros();
+        return result;
+    }
+    private static BigInteger ShiftBase(BigInteger a, int digitCount)
+    {
+        if (a.IsZero()) return new BigInteger(0);
+
+        BigInteger result = new BigInteger();
+        result.digits = new List<int>(new int[digitCount]);
+        result.digits.AddRange(a.digits);
+        return result;
+    }
+
+    private BigInteger Split(int start, int count)
+    {
+        BigInteger result = new BigInteger();
+        result.digits = new List<int>();
+
+        for (int i = start; i < start + count && i < digits.Count; i++)
+            result.digits.Add(digits[i]);
+
+        result.RemoveLeadingZeros();
+        return result;
+    }
+
+
+    public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger divisor)
+    {
+        if (divisor.IsZero())//ma3ndansh iszero()
+            throw new DivideByZeroException("Cannot divide by zero.");
+
+        if (this.IsZero())
+            return (new BigInteger(0), new BigInteger(0));
+
+        BigInteger dividend = new BigInteger();
+        dividend.digits = new List<int>(this.digits);
+
+        BigInteger quotient = new BigInteger();
+        quotient.digits.Clear();
+
+        BigInteger remainder = new BigInteger();
+        remainder.digits.Clear();
+
+        for (int i = dividend.digits.Count - 1; i >= 0; i--)
         {
-            if (divisor.IsZero())//ma3ndansh iszero()
-                throw new DivideByZeroException("Cannot divide by zero.");
-
-            if (this.IsZero())
-                return (new BigInteger(0), new BigInteger(0));
-
-            BigInteger dividend = new BigInteger();
-            dividend.digits = new List<int>(this.digits); 
-
-            BigInteger quotient = new BigInteger();
-            quotient.digits.Clear();
-
-            BigInteger remainder = new BigInteger();
-            remainder.digits.Clear();
-
-            for (int i = dividend.digits.Count - 1; i >= 0; i--)
-            {
-                remainder.digits.Insert(0, dividend.digits[i]);
-                remainder.RemoveLeadingZeros();
-
-                int low = 0, high = Base - 1, best = 0;
-                while (low <= high)
-                {
-                    int mid = (low + high) / 2;
-                    BigInteger trial = divisor * new BigInteger(mid);//mafesh * operator
-                    if (trial <= remainder)
-                    {
-                        best = mid;
-                        low = mid + 1;
-                    }
-                    else
-                    {
-                        high = mid - 1;
-                    }
-                }
-
-                quotient.digits.Insert(0, best);
-                remainder = remainder - (divisor * new BigInteger(best));
-            }
-
-            quotient.RemoveLeadingZeros();
+            remainder.digits.Insert(0, dividend.digits[i]);
             remainder.RemoveLeadingZeros();
 
-            return (quotient, remainder);
-        }
-    }
-}
+            int low = 0, high = Base - 1, best = 0;
+            while (low <= high)
+            {
+                int mid = (low + high) / 2;
+                BigInteger trial = divisor * new BigInteger(mid);//mafesh * operator
+                if (trial <= remainder)
+                {
+                    best = mid;
+                    low = mid + 1;
+                }
+                else
+                {
+                    high = mid - 1;
+                }
+            }
 
+            quotient.digits.Insert(0, best);
+            remainder = remainder - (divisor * new BigInteger(best));
+        }
+
+        quotient.RemoveLeadingZeros();
+        remainder.RemoveLeadingZeros();
+
+        return (quotient, remainder);
+    }
+
+    public bool IsZero()
+    {
+        RemoveLeadingZeros();
+        return digits.Count == 1 && digits[0] == 0;
+    }
+
+}
 
