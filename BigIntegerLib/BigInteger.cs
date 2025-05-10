@@ -187,19 +187,19 @@ public class BigInteger
     }
     // ========== Basic Operations ==========
 
-    public BigInteger Add(BigInteger a, BigInteger b)
+    public BigInteger Add(BigInteger other)
     {
         BigInteger result = new BigInteger();
         result.digits.Clear();
 
         int carry = 0;
-        int length = Math.Max(a.digits.Count, b.digits.Count);
+        int length = Math.Max(this.digits.Count, other.digits.Count);
 
         for(int i = 0; i < length || carry > 0; i++)
         {
             int sum = carry;
-            if (i < a.digits.Count) sum += a.digits[i];
-            if (i < b.digits.Count) sum += b.digits[i];
+            if (i < this.digits.Count) sum += this.digits[i];
+            if (i < other.digits.Count) sum += other.digits[i];
 
             carry = sum / Base;
             result.digits.Add(sum % Base);
@@ -208,23 +208,23 @@ public class BigInteger
         return result;
 
     }
-
    
-   
-    public BigInteger Subtract(BigInteger a, BigInteger b)
+    public BigInteger Subtract(BigInteger other)
     {
 
-        if (a < b) throw new ArgumentException("a must be greater than or equal to b");
+        if (this < other) throw new ArgumentException("Cannot subtract a larger number from a smaller one");
 
         BigInteger result = new BigInteger();
         result.digits.Clear();
 
 
         int borrow = 0;
-        for (int i = 0; i < a.digits.Count; i++)
+        for (int i = 0; i < this.digits.Count; i++)
         {
-            int diff = a.digits[i] - borrow;
-            if (i < b.digits.Count) diff -= b.digits[i];
+            int diff = this.digits[i] - borrow;
+
+            if (i < other.digits.Count)
+                diff -= other.digits[i];
 
             if (diff < 0)
             {
@@ -243,6 +243,8 @@ public class BigInteger
         return result;
 
     }
+
+
 
     public bool IsOdd()
     {
