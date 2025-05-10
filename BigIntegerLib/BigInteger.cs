@@ -282,13 +282,14 @@ public class BigInteger
         return result;
     }
 
-    public static BigInteger Karatsuba(BigInteger x, BigInteger y)
+    public static BigInteger Karatsuba(BigInteger x, BigInteger y, int depth = 0)
     {
+        const int RECURSION_LIMIT = 100;  // or adjust based on tests
+
         x.RemoveLeadingZeros();
         y.RemoveLeadingZeros();
 
-        // BASE CASE: Use naive multiplication for small inputs
-        if (x.digits.Count <= 32 || y.digits.Count <= 32)
+        if (x.digits.Count <= 32 || y.digits.Count <= 32 || depth > RECURSION_LIMIT)
             return NaiveMultiplication(x, y);
 
         int n = Math.Max(x.digits.Count, y.digits.Count);
@@ -299,9 +300,9 @@ public class BigInteger
         BigInteger low2 = y.Split(0, m);
         BigInteger high2 = y.Split(m, y.digits.Count - m);
 
-        BigInteger z0 = Karatsuba(low1, low2);
-        BigInteger z1 = Karatsuba(low1 + high1, low2 + high2);
-        BigInteger z2 = Karatsuba(high1, high2);
+        BigInteger z0 = Karatsuba(low1, low2, depth + 1);
+        BigInteger z1 = Karatsuba(low1 + high1, low2 + high2, depth + 1);
+        BigInteger z2 = Karatsuba(high1, high2, depth + 1);
 
         BigInteger result = ShiftBase(z2, 2 * m) + ShiftBase(z1 - z2 - z0, m) + z0;
         result.RemoveLeadingZeros();
