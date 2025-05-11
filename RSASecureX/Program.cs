@@ -48,6 +48,7 @@ class Program
             else
             {
                 result = rsa.Encrypt(message, exp, n);
+                Console.WriteLine("RES: " + result);
             }
 
             outputs.Add(result.ToString());
@@ -83,6 +84,8 @@ class Program
                 IsDecrypt = (mode == 1)
             });
         }
+
+
 
         return testCases;
     }
