@@ -21,9 +21,12 @@ class Program
         int systemTimeStart = System.Environment.TickCount;
         Console.WriteLine("RSA SecureX - Program Started.");
 
+        BigInteger a = new BigInteger("10000000000");
+        BigInteger b = new BigInteger("50000");
+
+        Console.WriteLine("Multiplication: " + a * b);
+
         RSA rsa = new RSA();
-        Console.WriteLine(rsa.Encrypt(new BigInteger("65"), new BigInteger("17"), new BigInteger("3233"))); // expect 2790
-        Console.WriteLine(rsa.Decrypt(new BigInteger("2790"), new BigInteger("413"), new BigInteger("3233"))); // expect 65
 
         // TODO: Read input file
         List<TestCase> testCases = new List<TestCase>();

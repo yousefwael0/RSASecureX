@@ -259,54 +259,40 @@ public class BigInteger
 
     // ========== Advanced Operations ==========
 
-    private static BigInteger NaiveMultiplication(BigInteger a, BigInteger b)
+    public static BigInteger Karatsuba(BigInteger x, BigInteger y)
     {
-        BigInteger result = new BigInteger();
-        result.digits = new List<int>(new int[a.digits.Count + b.digits.Count]);
-
-        for (int i = 0; i < a.digits.Count; i++)
-        {
-            long carry = 0;
-            for (int j = 0; j < b.digits.Count || carry > 0; j++)
-            {
-                long current = result.digits[i + j]
-                             + (long)a.digits[i] * (j < b.digits.Count ? b.digits[j] : 0)
-                             + carry;
-
-                result.digits[i + j] = (int)(current % a.Base);
-                carry = current / a.Base;
-            }
-        }
-
-        result.RemoveLeadingZeros();
-        return result;
-    }
-
-    public static BigInteger Karatsuba(BigInteger x, BigInteger y, int depth = 0)
-    {
-        const int RECURSION_LIMIT = 100;  // or adjust based on tests
-
         x.RemoveLeadingZeros();
         y.RemoveLeadingZeros();
 
-        if (x.digits.Count <= 32 || y.digits.Count <= 32 || depth > RECURSION_LIMIT)
-            return NaiveMultiplication(x, y);
-
         int n = Math.Max(x.digits.Count, y.digits.Count);
+
+        // Pad manually using zeros — you already use ShiftLeft and Split
+        while (x.digits.Count < n) x.digits.Add(0);
+        while (y.digits.Count < n) y.digits.Add(0);
+
+        if (n == 1)
+            return MultiplySingleDigits(x, y);
+
         int m = n / 2;
 
         BigInteger low1 = x.Split(0, m);
-        BigInteger high1 = x.Split(m, x.digits.Count - m);
+        BigInteger high1 = x.Split(m, n - m);
         BigInteger low2 = y.Split(0, m);
-        BigInteger high2 = y.Split(m, y.digits.Count - m);
+        BigInteger high2 = y.Split(m, n - m);
 
-        BigInteger z0 = Karatsuba(low1, low2, depth + 1);
-        BigInteger z1 = Karatsuba(low1 + high1, low2 + high2, depth + 1);
-        BigInteger z2 = Karatsuba(high1, high2, depth + 1);
+        BigInteger z0 = Karatsuba(low1, low2);
+        BigInteger z1 = Karatsuba(low1 + high1, low2 + high2);
+        BigInteger z2 = Karatsuba(high1, high2);
 
         BigInteger result = ShiftBase(z2, 2 * m) + ShiftBase(z1 - z2 - z0, m) + z0;
         result.RemoveLeadingZeros();
         return result;
+    }
+
+    private static BigInteger MultiplySingleDigits(BigInteger x, BigInteger y)
+    {
+        long product = (long)x.digits[0] * y.digits[0];
+        return new BigInteger(product); // assuming you have a constructor that accepts long
     }
     private static BigInteger ShiftBase(BigInteger a, int digitCount)
     {

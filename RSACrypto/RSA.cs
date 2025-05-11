@@ -8,7 +8,7 @@ public class RSA
     public BigInteger Encrypt(BigInteger M, BigInteger e, BigInteger n)
     {
         // E(M) = M^e MOD n
-        BigInteger res = new BigInteger("1");
+        BigInteger res = BigInteger.One;
         while (e > BigInteger.Zero){
             if (e.IsOdd()){
                 res = (res * M) % n;
@@ -23,7 +23,7 @@ public class RSA
     public BigInteger Decrypt(BigInteger cipher, BigInteger d, BigInteger n)
     {
         // M = cipher ^ d MOD n
-        BigInteger res = new BigInteger("1");
+        BigInteger res = BigInteger.One;
         while (d > BigInteger.Zero){
             if (d.IsOdd()){
                 res = (res * cipher) % n;
