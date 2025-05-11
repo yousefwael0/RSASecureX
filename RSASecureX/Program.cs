@@ -22,6 +22,8 @@ class Program
         Console.WriteLine("RSA SecureX - Program Started.");
 
         RSA rsa = new RSA();
+        Console.WriteLine(rsa.Encrypt(new BigInteger("65"), new BigInteger("17"), new BigInteger("3233"))); // expect 2790
+        Console.WriteLine(rsa.Decrypt(new BigInteger("2790"), new BigInteger("413"), new BigInteger("3233"))); // expect 65
 
         // TODO: Read input file
         List<TestCase> testCases = new List<TestCase>();
@@ -84,8 +86,6 @@ class Program
                 IsDecrypt = (mode == 1)
             });
         }
-
-
 
         return testCases;
     }
