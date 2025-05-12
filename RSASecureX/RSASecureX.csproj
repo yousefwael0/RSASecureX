@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="../BigIntegerLib/BigIntegerLib.csproj" />
     <ProjectReference Include="../RSACrypto/RSACrypto.csproj" />
+    <ProjectReference Include="..\RSAStringCrypt\RSAStringCrypt.csproj" />
   </ItemGroup>
 
 </Project>

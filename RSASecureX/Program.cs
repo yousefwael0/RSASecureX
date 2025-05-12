@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using BigIntegerLib;
 using RSACrypto;
+using RSAStringCrypto;
 
 namespace RSASecureX;
 
@@ -20,6 +21,15 @@ class Program
     {
         int systemTimeStart = System.Environment.TickCount;
         Console.WriteLine("RSA SecureX - Program Started.");
+
+        BigInteger e = new BigInteger("17");
+        BigInteger d = new BigInteger("413");
+        BigInteger n1 = new BigInteger("589");
+
+        string original = "HELLO Bob";
+        var encrypted = StringCrypto.EncryptString(original, e, n1);
+        var decrypted = StringCrypto.DecryptChunks(encrypted, d, n1);
+        Console.WriteLine(decrypted);
 
 
 

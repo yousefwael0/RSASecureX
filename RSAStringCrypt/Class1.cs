@@ -38,31 +38,45 @@ public class StringCrypto
         List<BigInteger> encryptedChunks = new List<BigInteger>();
         RSA rsa = new RSA();
 
-        int chunkSize = 0;
-        
+        // Step 1: Determine maximum safe encoded byte length (as decimal digits) that fits in n
+        int maxDigits = 0;
+        string testString = "";
+
         while (true)
         {
-            string temp = "";
-            for (int i = 0; i < chunkSize + 1; i++) temp += "255";
-            BigInteger test = new BigInteger(temp);
-
-            if (test >= n)
+            testString += "255"; // maximum value of a byte (3 digits)
+            if (new BigInteger(testString) >= n)
                 break;
-            chunkSize++;
+            maxDigits += 3;
         }
 
-        chunkSize--;
+        if (maxDigits == 0)
+            throw new ArgumentException("Modulus too small to encode even one byte.");
 
-        for (int i = 0; i < text.Length; i += chunkSize)
+        // Step 2: Encrypt chunks
+        int i = 0;
+        while (i < text.Length)
         {
-            string part = text.Substring(i, Math.Min(chunkSize, text.Length - i));
-            BigInteger m = StringToBigInteger(part);
+            string encodedChunk = "";
+            int charCount = 0;
+
+            // Add characters one by one until the encoded number would exceed n
+            while (i + charCount < text.Length && encodedChunk.Length + 3 <= maxDigits)
+            {
+                byte b = (byte)text[i + charCount];
+                encodedChunk += b.ToString("D3"); // always 3 digits
+                charCount++;
+            }
+
+            BigInteger m = new BigInteger(encodedChunk);
             BigInteger c = rsa.Encrypt(m, e, n);
             encryptedChunks.Add(c);
+            i += charCount;
         }
 
         return encryptedChunks;
     }
+
 
     public static string DecryptChunks(List<BigInteger> encryptedChunks, BigInteger d, BigInteger n)
     {
