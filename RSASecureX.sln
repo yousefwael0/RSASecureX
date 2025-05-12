@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigIntegerLib", "BigInteger
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSACrypto", "RSACrypto\RSACrypto.csproj", "{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSAStringCrypt", "RSAStringCrypt\RSAStringCrypt.csproj", "{A08305EB-31FC-4B98-8128-AE273A9272B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSAStringCrypto", "RSAStringCrypto\RSAStringCrypto.csproj", "{3D41EE7E-ECC2-47FC-B8CE-2E241086F526}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06EA2AE5-B5D5-4AD1-ABE8-0B51547CF86D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A08305EB-31FC-4B98-8128-AE273A9272B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A08305EB-31FC-4B98-8128-AE273A9272B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A08305EB-31FC-4B98-8128-AE273A9272B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A08305EB-31FC-4B98-8128-AE273A9272B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D41EE7E-ECC2-47FC-B8CE-2E241086F526}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D41EE7E-ECC2-47FC-B8CE-2E241086F526}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D41EE7E-ECC2-47FC-B8CE-2E241086F526}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D41EE7E-ECC2-47FC-B8CE-2E241086F526}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
