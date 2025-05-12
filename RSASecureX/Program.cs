@@ -21,14 +21,7 @@ class Program
         int systemTimeStart = System.Environment.TickCount;
         Console.WriteLine("RSA SecureX - Program Started.");
 
-        BigInteger e = new BigInteger("17");
-        BigInteger d = new BigInteger("413");
-        BigInteger n = new BigInteger("589");
 
-        string original = "HELLO";
-        var encrypted = StringCrypto.EncryptString(original, e, n);
-        var decrypted = StringCrypto.DecryptChunks(encrypted, d, n);
-        Console.WriteLine(decrypted == original); // Expect: True
 
 
         BigInteger a = new BigInteger("10000000000");
