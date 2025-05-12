@@ -21,6 +21,16 @@ class Program
         int systemTimeStart = System.Environment.TickCount;
         Console.WriteLine("RSA SecureX - Program Started.");
 
+        BigInteger e = new BigInteger("17");
+        BigInteger d = new BigInteger("413");
+        BigInteger n = new BigInteger("589");
+
+        string original = "HELLO";
+        var encrypted = StringCrypto.EncryptString(original, e, n);
+        var decrypted = StringCrypto.DecryptChunks(encrypted, d, n);
+        Console.WriteLine(decrypted == original); // Expect: True
+
+
         BigInteger a = new BigInteger("10000000000");
         BigInteger b = new BigInteger("50000");
 
@@ -33,9 +43,6 @@ class Program
         testCases = ReadInput("Test.txt");
 
         System.Console.WriteLine(testCases.Count);
-        // TODO: Choose encryption or decryption
-        // TODO: Measure execution time
-        // TODO: Write result to output file
         List<string> outputs = new List<string>();
 
         foreach (var testCase in testCases)
@@ -53,7 +60,6 @@ class Program
             else
             {
                 result = rsa.Encrypt(message, exp, n);
-                Console.WriteLine("RES: " + result);
             }
 
             outputs.Add(result.ToString());

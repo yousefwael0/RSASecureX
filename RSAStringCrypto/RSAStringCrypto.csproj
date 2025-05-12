@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BigIntegerLib\BigIntegerLib.csproj" />
+    <ProjectReference Include="..\RSASecureX\RSASecureX.csproj" />
+  </ItemGroup>
+
 </Project>
