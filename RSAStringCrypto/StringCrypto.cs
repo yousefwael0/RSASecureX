@@ -7,7 +7,7 @@ namespace RSAStringCrypto;
 
 public class StringCrypto
 {
-    // Total Complexity: O(n)
+    // Overall Complexity: O(n)
     static string BigIntegerToString(BigInteger number)
     {
         string numStr = number.ToString(); // O(n), n = number of digits
@@ -25,6 +25,7 @@ public class StringCrypto
         return sb.ToString(); // O(n)
     }
 
+    // Overall Complexity: O(k * log(e) *  m^1.585) where e is the exponent, k number of chunks and m number of digits of n
     public static List<BigInteger> EncryptString(string text, BigInteger e, BigInteger n)
     {
         List<BigInteger> encryptedChunks = new List<BigInteger>(); // O(1)
@@ -66,6 +67,8 @@ public class StringCrypto
         return encryptedChunks; // O(1)
     }
 
+
+    // Overall Complexity: O(k * log(d) * m^1.585) where d is the private exponent, k number of encrypted chunks and m is number of digits of n
 
     public static string DecryptChunks(List<BigInteger> encryptedChunks, BigInteger d, BigInteger n)
     {
