@@ -4,6 +4,7 @@ using System.IO;
 using BigIntegerLib;
 using RSACrypto;
 using RSAStringCrypto;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RSASecureX;
 
@@ -20,35 +21,16 @@ class Program
     static void Main(string[] args)
     {
         int systemTimeStart = System.Environment.TickCount;
-        Console.WriteLine("RSA SecureX - Program Started.");
-
-        BigInteger e = new BigInteger("17");
-        BigInteger d = new BigInteger("413");
-        BigInteger n1 = new BigInteger("589");
-
-        string original = "HELLO Bob";
-        var encrypted = StringCrypto.EncryptString(original, e, n1);
-        var decrypted = StringCrypto.DecryptChunks(encrypted, d, n1);
-        Console.WriteLine(decrypted);
-
-
-
-
-        BigInteger a = new BigInteger("10000000000");
-        BigInteger b = new BigInteger("50000");
-
-        Console.WriteLine("Multiplication: " + a * b);
+        Console.WriteLine("===== Sample Cases =====");
 
         RSA rsa = new RSA();
 
-        // TODO: Read input file
-        List<TestCase> testCases = new List<TestCase>();
-        testCases = ReadInput("Test.txt");
+        List<TestCase> sampleCases = new List<TestCase>();
+        sampleCases = ReadInput("Sample.txt");
 
-        System.Console.WriteLine(testCases.Count);
-        List<string> outputs = new List<string>();
+        List<string> sampleOutputs = new List<string>();
 
-        foreach (var testCase in testCases)
+        foreach (var testCase in sampleCases)
         {
             BigInteger n = new BigInteger(testCase.N);
             BigInteger exp = new BigInteger(testCase.Exponent);
@@ -65,19 +47,57 @@ class Program
                 result = rsa.Encrypt(message, exp, n);
             }
 
-            outputs.Add(result.ToString());
+            sampleOutputs.Add(result.ToString());
         }
 
-        WriteOutput("Output.txt", outputs);
+        WriteOutput("SampleOutput.txt", sampleOutputs);
 
         int systemTimeEnd = System.Environment.TickCount;
         Console.WriteLine("Execution Time: " + (systemTimeEnd - systemTimeStart) + "ms");
+
+        Console.WriteLine("===== Complete Test Cases =====");
+        List<TestCase> completeCases = new List<TestCase>();
+        completeCases = ReadInput("Complete.txt");
+
+        List<string> completeOutputs = new List<string>();
+
+        int completeCasesStart = System.Environment.TickCount;
+
+        int i = 0;
+
+        foreach (var testCase in completeCases)
+        {
+            systemTimeStart = System.Environment.TickCount;
+
+            BigInteger n = new BigInteger(testCase.N);
+            BigInteger exp = new BigInteger(testCase.Exponent);
+            BigInteger message = new BigInteger(testCase.Message);
+
+            BigInteger result;
+
+            if (testCase.IsDecrypt)
+            {
+                result = rsa.Decrypt(message, exp, n);
+            }
+            else
+            {
+                result = rsa.Encrypt(message, exp, n);
+            }
+
+            completeOutputs.Add(result.ToString());
+            systemTimeEnd = System.Environment.TickCount;
+            Console.WriteLine("Case " + i + ": " + (systemTimeEnd - systemTimeStart) + "ms");
+            i++;
+        }
+
+        WriteOutput("CompleteOutput.txt", completeOutputs);
+        int completeCasesEnd = System.Environment.TickCount;
+        Console.WriteLine("Complete Test Cases Total: " + (completeCasesEnd - completeCasesStart) + "ms");
     }
 
-    // Read input from file
     public static List<TestCase> ReadInput(string inputPath)
     {
-        List<TestCase> testCases = new List<TestCase>();
+        List<TestCase> sampleCases = new List<TestCase>();
 
         string[] lines = File.ReadAllLines(inputPath);
         int index = 1;
@@ -90,7 +110,7 @@ class Program
             string message = lines[index++];
             int mode = int.Parse(lines[index++]);
 
-            testCases.Add(new TestCase
+            sampleCases.Add(new TestCase
             {
                 N = n,
                 Exponent = exponent,
@@ -99,23 +119,11 @@ class Program
             });
         }
 
-        return testCases;
+        return sampleCases;
     }
 
-
-    // Write output to file
     static void WriteOutput(string outputPath, List<string> results)
     {
         File.WriteAllLines(outputPath, results);
-    }
-
-
-    // Measure execution time helper
-    static TimeSpan MeasureExecutionTime(Action operation)
-    {
-        Stopwatch stopwatch = Stopwatch.StartNew();
-        operation();
-        stopwatch.Stop();
-        return stopwatch.Elapsed;
     }
 }

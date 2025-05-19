@@ -319,51 +319,37 @@ public class BigInteger
 
     public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger divisor)
     {
-        if (divisor.IsZero())//ma3ndansh iszero()
-            throw new DivideByZeroException("Cannot divide by zero.");
+        if (divisor.IsZero()) throw new DivideByZeroException();
+        if (this < divisor) return (new BigInteger(0), new BigInteger(this.ToString()));
 
-        if (this.IsZero())
-            return (new BigInteger(0), new BigInteger(0));
+        BigInteger quotient = new BigInteger(0);
+        BigInteger remainder = new BigInteger(0);
 
-        BigInteger dividend = new BigInteger();
-        dividend.digits = new List<int>(this.digits);
-
-        BigInteger quotient = new BigInteger();
-        quotient.digits.Clear();
-
-        BigInteger remainder = new BigInteger();
-        remainder.digits.Clear();
-
-        for (int i = dividend.digits.Count - 1; i >= 0; i--)
+        for (int i = this.digits.Count - 1; i >= 0; i--)
         {
-            remainder.digits.Insert(0, dividend.digits[i]);
-            remainder.RemoveLeadingZeros();
+            remainder = ShiftBase(remainder, 1) + new BigInteger(this.digits[i]);
 
-            int low = 0, high = Base - 1, best = 0;
-            while (low <= high)
+            int left = 0, right = Base;
+            while (left < right)
             {
-                int mid = (low + high) / 2;
-                BigInteger trial = divisor * new BigInteger(mid);//mafesh * operator
-                if (trial <= remainder)
-                {
-                    best = mid;
-                    low = mid + 1;
-                }
+                int mid = (left + right + 1) / 2;
+                BigInteger midVal = divisor * new BigInteger(mid);
+
+                if (midVal <= remainder)
+                    left = mid;
                 else
-                {
-                    high = mid - 1;
-                }
+                    right = mid - 1;
             }
 
-            quotient.digits.Insert(0, best);
-            remainder = remainder - (divisor * new BigInteger(best));
+            quotient.digits.Insert(0, left);
+            remainder = remainder - (divisor * new BigInteger(left));
         }
 
         quotient.RemoveLeadingZeros();
         remainder.RemoveLeadingZeros();
-
         return (quotient, remainder);
     }
+
 
     public bool IsZero()
     {

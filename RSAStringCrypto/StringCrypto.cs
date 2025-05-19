@@ -7,89 +7,78 @@ namespace RSAStringCrypto;
 
 public class StringCrypto
 {
-    static BigInteger StringToBigInteger(string text)
-    {
-        StringBuilder sb = new StringBuilder();
-        foreach (char c in text)
-        {
-            sb.Append(((int)c).ToString("D3"));
-        }
-        return new BigInteger(sb.ToString());
-    }
-
+    // Total Complexity: O(n)
     static string BigIntegerToString(BigInteger number)
     {
-        string numStr = number.ToString();
+        string numStr = number.ToString(); // O(n), n = number of digits
 
-        while (numStr.Length % 3 != 0)
-            numStr = "0" + numStr;
+        while (numStr.Length % 3 != 0) // At most 2 iterations
+            numStr = "0" + numStr; // O(n) for string concatenation
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numStr.Length; i += 3)
+        StringBuilder sb = new StringBuilder(); // O(1)
+
+        for (int i = 0; i < numStr.Length; i += 3) // O(n)
         {
-            int ascii = int.Parse(numStr.Substring(i, 3));
-            sb.Append((char)ascii);
+            int ascii = int.Parse(numStr.Substring(i, 3)); // O(1)
+            sb.Append((char)ascii); // O(1)
         }
-        return sb.ToString();
+        return sb.ToString(); // O(n)
     }
 
     public static List<BigInteger> EncryptString(string text, BigInteger e, BigInteger n)
     {
-        List<BigInteger> encryptedChunks = new List<BigInteger>();
-        RSA rsa = new RSA();
+        List<BigInteger> encryptedChunks = new List<BigInteger>(); // O(1)
+        RSA rsa = new RSA(); // O(1)
 
-        // Step 1: Determine maximum safe encoded byte length (as decimal digits) that fits in n
-        int maxDigits = 0;
-        string testString = "";
+        int maxDigits = 0; // O(1)
+        string testString = ""; // O(1)
 
         while (true)
         {
-            testString += "255"; // maximum value of a byte (3 digits)
-            if (new BigInteger(testString) >= n)
-                break;
-            maxDigits += 3;
+            testString += "255"; // O(m), m is current length in the loop
+            if (new BigInteger(testString) >= n) // O(k), k is the length of testString
+                break; // O(1)
+            maxDigits += 3; // O(1)
         }
 
-        if (maxDigits == 0)
-            throw new ArgumentException("Modulus too small to encode even one byte.");
+        if (maxDigits == 0) // O(1)
+            throw new ArgumentException("Modulus too small to encode even one byte."); // O(1)
 
-        // Step 2: Encrypt chunks
-        int i = 0;
+        int i = 0; // O(1)
         while (i < text.Length)
         {
-            string encodedChunk = "";
-            int charCount = 0;
+            string encodedChunk = ""; // O(1)
+            int charCount = 0; // O(1)
 
-            // Add characters one by one until the encoded number would exceed n
-            while (i + charCount < text.Length && encodedChunk.Length + 3 <= maxDigits)
+            while (i + charCount < text.Length && encodedChunk.Length + 3 <= maxDigits) // O(n), n is text length
             {
-                byte b = (byte)text[i + charCount];
-                encodedChunk += b.ToString("D3"); // always 3 digits
-                charCount++;
+                byte b = (byte)text[i + charCount]; // O(1)
+                encodedChunk += b.ToString("D3"); // O(1)
+                charCount++; // O(1)
             }
 
-            BigInteger m = new BigInteger(encodedChunk);
-            BigInteger c = rsa.Encrypt(m, e, n);
-            encryptedChunks.Add(c);
-            i += charCount;
+            BigInteger m = new BigInteger(encodedChunk); // O(b), b is number of digits in the chunk
+            BigInteger c = rsa.Encrypt(m, e, n); // O(log(e) x k^1.585)
+            encryptedChunks.Add(c); // O(1)
+            i += charCount; // O(1)
         }
 
-        return encryptedChunks;
+        return encryptedChunks; // O(1)
     }
 
 
     public static string DecryptChunks(List<BigInteger> encryptedChunks, BigInteger d, BigInteger n)
     {
-        StringBuilder result = new StringBuilder();
-        RSA rsa = new RSA();
+        StringBuilder result = new StringBuilder(); // O(1)
+        RSA rsa = new RSA(); // O(1)
 
         foreach (var chunk in encryptedChunks)
         {
-            BigInteger m = rsa.Decrypt(chunk, d, n);
-            string part = BigIntegerToString(m);
-            result.Append(part);
+            BigInteger m = rsa.Decrypt(chunk, d, n); // O(log(e) x k^1.585)
+            string part = BigIntegerToString(m); // O(n)
+            result.Append(part); //O(n)
         }
 
-        return result.ToString();
+        return result.ToString(); // O(n)
     }
 }
