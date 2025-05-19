@@ -316,40 +316,29 @@ public class BigInteger
         return result;
     }
 
-
     public (BigInteger Quotient, BigInteger Remainder) Divide(BigInteger divisor)
     {
-        if (divisor.IsZero()) throw new DivideByZeroException();
-        if (this < divisor) return (new BigInteger(0), new BigInteger(this.ToString()));
+        if (divisor.IsZero()) // O(n)
+            throw new DivideByZeroException("Cannot divide by zero."); // O(1)
 
-        BigInteger quotient = new BigInteger(0);
-        BigInteger remainder = new BigInteger(0);
+        if (this < divisor)
+            return (new BigInteger(0), new BigInteger(this.ToString()));
 
-        for (int i = this.digits.Count - 1; i >= 0; i--)
+        BigInteger two = new BigInteger(2); // O(1)
+        BigInteger doubleDivisor = divisor * two;
+        var (q, r) = this.Divide(doubleDivisor);
+
+        q = q * two;
+
+        if (r < divisor)
         {
-            remainder = ShiftBase(remainder, 1) + new BigInteger(this.digits[i]);
-
-            int left = 0, right = Base;
-            while (left < right)
-            {
-                int mid = (left + right + 1) / 2;
-                BigInteger midVal = divisor * new BigInteger(mid);
-
-                if (midVal <= remainder)
-                    left = mid;
-                else
-                    right = mid - 1;
-            }
-
-            quotient.digits.Insert(0, left);
-            remainder = remainder - (divisor * new BigInteger(left));
+            return (q, r);
         }
-
-        quotient.RemoveLeadingZeros();
-        remainder.RemoveLeadingZeros();
-        return (quotient, remainder);
+        else
+        {
+            return (q + new BigInteger(1), r - divisor);
+        }
     }
-
 
     public bool IsZero()
     {
