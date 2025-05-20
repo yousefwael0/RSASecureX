@@ -346,5 +346,15 @@ public class BigInteger
         return digits.Count == 1 && digits[0] == 0;
     }
 
+    public static BigInteger GCD(BigInteger a, BigInteger b)
+    {
+        while (!b.IsZero())
+        {
+            BigInteger temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
 }
 
