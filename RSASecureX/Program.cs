@@ -93,6 +93,7 @@ class Program
         WriteOutput("CompleteOutput.txt", completeOutputs);
         int completeCasesEnd = System.Environment.TickCount;
         Console.WriteLine("Complete Test Cases Total: " + (completeCasesEnd - completeCasesStart) + "ms");
+        TestKeyGeneration(64);
     }
 
     public static List<TestCase> ReadInput(string inputPath)
@@ -125,5 +126,24 @@ class Program
     static void WriteOutput(string outputPath, List<string> results)
     {
         File.WriteAllLines(outputPath, results);
+    }
+
+    public static (BigInteger e, BigInteger n) TestKeyGeneration(int digits)
+    {
+        RSA rsa = new RSA();
+
+        Console.WriteLine($"Generating RSA public key with prime size ~{digits} digits...");
+
+        Stopwatch sw = Stopwatch.StartNew();
+
+        var (e, n) = rsa.GeneratePublicKey(digits);
+
+        sw.Stop();
+
+        Console.WriteLine($"Done in {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"e = {e.ToString().Substring(0, Math.Min(50, e.ToString().Length))}...");
+        Console.WriteLine($"n = {n.ToString().Substring(0, Math.Min(50, n.ToString().Length))}...");
+        Console.WriteLine(new string('-', 60));
+        return (e, n);
     }
 }

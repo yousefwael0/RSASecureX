@@ -150,7 +150,11 @@ public class BigInteger
 
     public static BigInteger operator *(BigInteger a, BigInteger b)
     {
-        return Karatsuba(a, b);
+        const int KaratsubaThreshold = 200; // or tweak based on testing
+        if (a.digits.Count < KaratsubaThreshold || b.digits.Count < KaratsubaThreshold)
+            return NaiveMultiply(a, b);
+        else
+            return Karatsuba(a, b);
     }
 
     public static BigInteger operator /(BigInteger a, BigInteger b)
@@ -244,8 +248,6 @@ public class BigInteger
 
     }
 
-
-
     public bool IsOdd()
     {
         return !IsEven();
@@ -258,6 +260,29 @@ public class BigInteger
     }
 
     // ========== Advanced Operations ==========
+    public static BigInteger NaiveMultiply(BigInteger a, BigInteger b)
+    {
+        BigInteger result = new BigInteger();
+        result.digits = new List<int>(new int[a.digits.Count + b.digits.Count]);
+
+        for (int i = 0; i < a.digits.Count; i++)
+        {
+            long carry = 0;
+            for (int j = 0; j < b.digits.Count || carry > 0; j++)
+            {
+                long cur = result.digits[i + j]
+                           + (long)a.digits[i] * (j < b.digits.Count ? b.digits[j] : 0)
+                           + carry;
+
+                result.digits[i + j] = (int)(cur % a.Base);
+                carry = cur / a.Base;
+            }
+        }
+
+        result.RemoveLeadingZeros();
+        return result;
+    }
+
 
     public static BigInteger Karatsuba(BigInteger x, BigInteger y)
     {
